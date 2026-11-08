@@ -195,6 +195,50 @@
   }
 }
 
+/* The teacher's exercise book (Classroom): ruled every --rule, with the red
+   margin line of a school notebook. Content set on the rule rhythm. */
+@utility notebook {
+  --rule: 2rem;
+  --margin: 2.75rem;
+  position: relative;
+  padding-left: calc(var(--margin) + 1rem);
+  padding-right: 1rem;
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(var(--rule) - 1px),
+    color-mix(in srgb, var(--color-line) 75%, transparent) calc(var(--rule) - 1px)
+  );
+  background-size: 100% var(--rule);
+  /* Lift the rules so text stands on them instead of floating between. */
+  background-position: 0 calc(var(--rule) * -0.22);
+  line-height: var(--rule);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--margin);
+    width: 1px;
+    background-color: var(--color-oxblood);
+  }
+
+  @media (width >= 48rem) {
+    --margin: 5rem;
+    padding-left: calc(var(--margin) + 2rem);
+    padding-right: 2rem;
+  }
+}
+
+/* A note written in the notebook's margin, left of the red line. */
+@utility margin-note {
+  position: absolute;
+  left: 0;
+  width: var(--margin);
+  padding-right: 0.75rem;
+  text-align: right;
+}
+
 /* Dotted leaders, as in a book index: "Linux ........ II". */
 @utility leader {
   flex: 1 1 auto;

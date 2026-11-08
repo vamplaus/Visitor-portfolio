@@ -5,11 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { fonds } from "@/content/fonds";
-import { site } from "@/content/site";
 import { Emblem } from "@/components/ui/emblem";
 import { cn } from "@/lib/cn";
-import { toRoman } from "@/lib/roman";
+import type { IndexLabels, NavEntry } from "./nav-types";
 
 /**
  * The archive index: a full-screen table of contents.
@@ -27,7 +25,17 @@ const item = {
   shown: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function IndexDialog({
+  open,
+  onClose,
+  labels,
+  entries,
+}: {
+  open: boolean;
+  onClose: () => void;
+  labels: IndexLabels;
+  entries: NavEntry[];
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   const pathname = usePathname();
 
@@ -38,10 +46,7 @@ export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => v
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  const entries = [
-    { numeral: "0", title: "Vestibule", kicker: "Entrance and catalogue", href: "/", emblem: null },
-    ...fonds.map((f) => ({ numeral: f.numeral, title: f.title, kicker: f.kicker, href: f.href, emblem: f.emblem })),
-  ];
+  const home = entries[0]?.href;
 
   return (
     <dialog
@@ -54,7 +59,7 @@ export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => v
       <div className="frame flex h-full flex-col">
         <div className="flex h-12 shrink-0 items-center justify-between border-b border-line">
           <h2 id="archive-index-title" className="meta text-ash">
-            Index of the archive <span className="text-dust">/</span> {toRoman(fonds.length)} fonds
+            {labels.title} <span className="text-dust">/</span> {labels.fondsCount}
           </h2>
           <button
             type="button"
@@ -62,12 +67,12 @@ export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => v
             autoFocus
             className="meta -mr-2 flex items-center gap-2 px-2 py-2 text-paper transition-colors hover:text-ember"
           >
-            Close
+            {labels.close}
             <X aria-hidden className="size-4" strokeWidth={1.25} />
           </button>
         </div>
 
-        <nav aria-label="Archive index" className="grid-archive min-h-0 flex-1 overflow-y-auto py-8 md:py-12">
+        <nav aria-label={labels.nav} className="grid-archive min-h-0 flex-1 overflow-y-auto py-6 md:py-12">
           <m.ol
             className="col-span-full lg:col-span-8"
             variants={list}
@@ -75,14 +80,14 @@ export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => v
             animate={open ? "shown" : "hidden"}
           >
             {entries.map((entry) => {
-              const current = entry.href === "/" ? pathname === "/" : pathname.startsWith(entry.href);
+              const current = entry.href === home ? pathname === home : pathname.startsWith(entry.href);
               return (
                 <m.li key={entry.href} variants={item} className="border-b border-line first:border-t">
                   <Link
                     href={entry.href}
                     onNavigate={onClose}
                     aria-current={current ? "page" : undefined}
-                    className="group grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 py-4 md:grid-cols-[5rem_1fr_auto] md:py-5"
+                    className="group grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 py-3.5 md:grid-cols-[5rem_1fr_auto] md:py-5"
                   >
                     <span className={cn("meta", current ? "text-ember" : "text-ash")}>{entry.numeral}</span>
                     <span className="min-w-0">
@@ -107,23 +112,21 @@ export function IndexDialog({ open, onClose }: { open: boolean; onClose: () => v
           </m.ol>
 
           <aside className="col-span-full mt-10 space-y-8 lg:col-span-3 lg:col-start-10 lg:mt-0">
-            <div>
-              <p className="meta text-ash">Keys</p>
+            <div className="hidden md:block">
+              <p className="meta text-ash">{labels.keys}</p>
               <dl className="meta mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-paper">
                 <dt>Tab</dt>
-                <dd className="text-ash">Next entry</dd>
+                <dd className="text-ash">{labels.keyTab}</dd>
                 <dt>Enter</dt>
-                <dd className="text-ash">Open fond</dd>
+                <dd className="text-ash">{labels.keyEnter}</dd>
                 <dt>Esc</dt>
-                <dd className="text-ash">Close index</dd>
+                <dd className="text-ash">{labels.keyEsc}</dd>
               </dl>
             </div>
             <div>
-              <p className="meta text-ash">Archive</p>
-              <p className="mt-3 font-display text-lede italic text-paper">{site.taglineText}</p>
-              <p className="meta mt-3 text-ash">
-                v{site.version} · {site.stage}
-              </p>
+              <p className="meta text-ash">{labels.archive}</p>
+              <p className="mt-3 font-display text-lede text-paper italic">{labels.tagline}</p>
+              <p className="meta mt-3 text-ash">{labels.version}</p>
             </div>
           </aside>
         </nav>

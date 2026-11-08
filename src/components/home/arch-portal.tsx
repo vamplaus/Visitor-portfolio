@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { archivoltPath, lancetPath } from "@/lib/gothic";
 
 /**
  * A Gothic window, drawn the way it was designed: with compass and straightedge.
@@ -13,26 +14,9 @@ import { cn } from "@/lib/cn";
  * simply present when the sequence does not play.
  */
 
-// Geometry (viewBox 0 0 400 640). Springline y = 330.
+// Geometry (viewBox 0 0 400 640). Springline y = 330, floor y = 640.
 const S = 330;
-const arch = (x1: number, x2: number, springline: number) => {
-  const span = x2 - x1;
-  const apexX = (x1 + x2) / 2;
-  const apexY = springline - Math.sqrt(span * span - (span / 2) * (span / 2));
-  return { span, apexX, apexY: Math.round(apexY * 100) / 100 };
-};
-
-const a1 = arch(20, 380, S);
-const a2 = arch(50, 350, S);
-const a3 = arch(80, 320, S);
-const lancetL = arch(80, 200, 400);
-const lancetR = arch(200, 320, 400);
-
-const archivolt = (x1: number, x2: number, a: ReturnType<typeof arch>, springline: number, foot = 640) =>
-  `M${x1} ${foot}V${springline}A${a.span} ${a.span} 0 0 1 ${a.apexX} ${a.apexY}A${a.span} ${a.span} 0 0 1 ${x2} ${springline}V${foot}`;
-
-const lancet = (x1: number, x2: number, a: ReturnType<typeof arch>, springline: number) =>
-  `M${x1} ${springline}A${a.span} ${a.span} 0 0 1 ${a.apexX} ${a.apexY}A${a.span} ${a.span} 0 0 1 ${x2} ${springline}`;
+const FLOOR = 640;
 
 // Oculus: centre and radius chosen to sit clear of the inner archivolt and the lancets.
 const OC = { x: 200, y: 222, r: 66, inner: 22 };
@@ -67,15 +51,15 @@ export function ArchPortal({ className }: { className?: string }) {
 
       {/* Archivolts */}
       <g className="stroke-line-strong" strokeWidth={0.8}>
-        <path d={archivolt(20, 380, a1, S)} pathLength={1} className="intro-draw" style={delay(0)} />
-        <path d={archivolt(50, 350, a2, S)} pathLength={1} className="intro-draw" style={delay(180)} />
-        <path d={archivolt(80, 320, a3, S)} pathLength={1} className="intro-draw" style={delay(360)} />
+        <path d={archivoltPath(20, 380, S, FLOOR)} pathLength={1} className="intro-draw" style={delay(0)} />
+        <path d={archivoltPath(50, 350, S, FLOOR)} pathLength={1} className="intro-draw" style={delay(180)} />
+        <path d={archivoltPath(80, 320, S, FLOOR)} pathLength={1} className="intro-draw" style={delay(360)} />
       </g>
 
       {/* Tracery: lancets, mullion, oculus */}
       <g className="stroke-line" strokeWidth={0.8}>
-        <path d={lancet(80, 200, lancetL, 400)} pathLength={1} className="intro-draw" style={delay(700)} />
-        <path d={lancet(200, 320, lancetR, 400)} pathLength={1} className="intro-draw" style={delay(780)} />
+        <path d={lancetPath(80, 200, 400)} pathLength={1} className="intro-draw" style={delay(700)} />
+        <path d={lancetPath(200, 320, 400)} pathLength={1} className="intro-draw" style={delay(780)} />
         <path d="M200 400V640" pathLength={1} className="intro-draw" style={delay(860)} />
         <circle cx={OC.x} cy={OC.y} r={OC.r} pathLength={1} className="intro-draw" style={delay(900)} />
         <circle cx={OC.x} cy={OC.y} r={OC.inner} pathLength={1} className="intro-draw" style={delay(1100)} />

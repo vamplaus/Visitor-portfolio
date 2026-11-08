@@ -18,12 +18,12 @@ function getServerSnapshot() {
   return null;
 }
 
-export function Clock({ className }: { className?: string }) {
+export function Clock({ className, suffix }: { className?: string; suffix: string }) {
   const time = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   return (
     <span className={className} aria-hidden>
       {time ?? "--:--"}
-      <span className="ml-1.5 text-ash">LOC</span>
+      <span className="ml-1.5 text-ash">{suffix}</span>
     </span>
   );
 }

@@ -1,9 +1,9 @@
 import { FondPlaceholder } from "@/components/fond/fond-placeholder";
 import { fondMetadata } from "@/components/fond/metadata";
 
-export const metadata = fondMetadata("journal");
+export const generateMetadata = fondMetadata("journal");
 
-/** Fond: Journal. Placeholder until this fond opens in Stage 2. */
+/** Fond: Journal. In preparation — opens in a later stage. */
 export default function JournalPage() {
   return <FondPlaceholder id="journal" />;
 }
