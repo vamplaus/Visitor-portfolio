@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { INTRO_DURATION } from "./intro";
+import { INTRO_DURATION } from "./boot";
 
 /**
  * Ends the entrance sequence: after it has played, or as soon as the visitor

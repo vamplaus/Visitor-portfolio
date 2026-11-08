@@ -8,6 +8,8 @@ import { Seal } from "@/components/ui/seal";
 import { Clock } from "./clock";
 import { IndexDialog } from "./index-dialog";
 import { LangSwitch, LangSwitchLive } from "./lang-switch";
+import { MotionToggle } from "./motion-toggle";
+import { ScrollProgress } from "@/components/system/scroll-progress";
 import type { BarLabels, IndexLabels, NavEntry } from "./nav-types";
 
 /**
@@ -20,10 +22,12 @@ export function StatusBar({
   lang,
   labels,
   indexLabels,
+  motionLabels,
   entries,
 }: {
   lang: Locale;
   labels: BarLabels;
+  motionLabels: { label: string; on: string; off: string };
   indexLabels: IndexLabels;
   entries: NavEntry[];
 }) {
@@ -54,6 +58,9 @@ export function StatusBar({
           </p>
 
           <div className="flex items-center gap-3 sm:gap-5">
+            <span className="hidden xl:block">
+              <MotionToggle {...motionLabels} />
+            </span>
             <Suspense fallback={<LangSwitch lang={lang} label={labels.language} />}>
               <LangSwitchLive lang={lang} label={labels.language} />
             </Suspense>
@@ -75,9 +82,16 @@ export function StatusBar({
             </button>
           </div>
         </div>
+        <ScrollProgress />
       </header>
       <Suspense fallback={null}>
-        <IndexDialog open={open} onClose={() => setOpen(false)} labels={indexLabels} entries={entries} />
+        <IndexDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          labels={indexLabels}
+          motionLabels={motionLabels}
+          entries={entries}
+        />
       </Suspense>
     </>
   );

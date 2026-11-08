@@ -13,7 +13,7 @@ export async function Notebook() {
   const t = dict.classroom;
 
   return (
-    <div className="notebook border border-line py-[var(--rule)]">
+    <div data-reveal="notebook" className="notebook border border-line py-[var(--rule)]">
       {classroomSections.map((section, i) => {
         const entries = classroomEntries.filter((e) => e.section === section);
         return (
@@ -33,7 +33,11 @@ export async function Notebook() {
               <ol>
                 {entries.map((entry) => (
                   <li key={entry.slug}>
-                    <Link href={localizedPath(lang, `/classroom/${entry.slug}`)} className="group block">
+                    <Link
+                      href={localizedPath(lang, `/classroom/${entry.slug}`)}
+                      data-cursor={dict.cursor.open}
+                      className="group block"
+                    >
                       <span className="meta flex flex-wrap items-center gap-x-3 leading-[var(--rule)] text-ash">
                         {entry.code}
                         {entry.specimen ? (

@@ -1,9 +1,9 @@
 import { labEntries, labSlots } from "@/content/laboratory";
 import type { LabDomain } from "@/content/types";
 import { getI18n } from "@/i18n/server";
+import { ReadoutNumber } from "@/components/ui/readout-number";
 
 const domains: LabDomain[] = ["ai", "python", "linux", "automation", "web"];
-const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
  * Instrument panel: counts read from the register itself.
@@ -19,13 +19,21 @@ export async function Readout() {
   ];
 
   return (
-    <div className="mt-8 md:mt-10" role="group" aria-label={t.readoutLabel}>
+    <div
+      data-enter="rise"
+      style={{ ["--d" as string]: "750ms" } as React.CSSProperties}
+      className="mt-8 md:mt-10"
+      role="group"
+      aria-label={t.readoutLabel}
+    >
       <p className="meta text-ash">{t.readoutLabel}</p>
       <dl className="mt-3 grid grid-cols-3 border-t border-l border-line">
         {counts.map((c) => (
           <div key={c.label} className="border-r border-b border-line px-3 py-3 md:px-5 md:py-4">
             <dt className="meta text-ash">{c.label}</dt>
-            <dd className="mt-1 font-mono text-2xl text-paper tabular-nums md:text-4xl">{pad(c.value)}</dd>
+            <dd className="mt-1 font-mono text-2xl text-paper md:text-4xl">
+              <ReadoutNumber value={c.value} />
+            </dd>
           </div>
         ))}
       </dl>
@@ -35,7 +43,9 @@ export async function Readout() {
           return (
             <div key={d} className="border-r border-b border-line px-2 py-2.5 md:px-5">
               <dt className="meta truncate text-ash">{t.domains[d]}</dt>
-              <dd className={n ? "meta mt-1 text-paper" : "meta mt-1 text-ash"}>{pad(n)}</dd>
+              <dd className={n ? "meta mt-1 text-paper" : "meta mt-1 text-ash"}>
+                <ReadoutNumber value={n} />
+              </dd>
             </div>
           );
         })}

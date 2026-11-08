@@ -41,6 +41,17 @@ export const en = {
     index: "Index",
     localTime: "LOC",
     language: "Language",
+    motion: "Motion",
+    motionOn: "on",
+    motionOff: "off",
+  },
+
+  /** Short labels shown by the reticle next to the pointer. */
+  cursor: {
+    enter: "Enter",
+    open: "Open",
+    read: "Read",
+    toggle: "Switch",
   },
 
   index: {

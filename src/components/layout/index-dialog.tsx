@@ -3,10 +3,11 @@
 import { m } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Emblem } from "@/components/ui/emblem";
 import { cn } from "@/lib/cn";
+import { MotionToggle } from "./motion-toggle";
 import type { IndexLabels, NavEntry } from "./nav-types";
 
 /**
@@ -21,23 +22,26 @@ const list = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 14 },
-  shown: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 48, rotate: 1.5 },
+  shown: { opacity: 1, y: 0, rotate: 0, transition: { duration: 0.9 } },
 };
 
 export function IndexDialog({
   open,
   onClose,
   labels,
+  motionLabels,
   entries,
 }: {
   open: boolean;
   onClose: () => void;
   labels: IndexLabels;
+  motionLabels: { label: string; on: string; off: string };
   entries: NavEntry[];
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const pathname = usePathname();
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const dialog = ref.current;
@@ -56,7 +60,20 @@ export function IndexDialog({
       onClose={onClose}
       className="index-dialog fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-hidden bg-void p-0 text-paper"
     >
-      <div className="frame flex h-full flex-col">
+      {/* The numeral of the entry under the pointer, drawn huge behind the list */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {entries.map((entry) => (
+          <span
+            key={entry.href}
+            data-active={active === entry.href ? "" : undefined}
+            className="index-numeral absolute right-[-0.04em] bottom-[-0.18em] font-display text-[clamp(14rem,42vw,40rem)] leading-none font-light text-transparent [-webkit-text-stroke:1px_var(--color-line-strong)]"
+          >
+            {entry.numeral}
+          </span>
+        ))}
+      </div>
+
+      <div className="frame relative flex h-full flex-col">
         <div className="flex h-12 shrink-0 items-center justify-between border-b border-line">
           <h2 id="archive-index-title" className="meta text-ash">
             {labels.title} <span className="text-dust">/</span> {labels.fondsCount}
@@ -86,6 +103,9 @@ export function IndexDialog({
                   <Link
                     href={entry.href}
                     onNavigate={onClose}
+                    onPointerEnter={() => setActive(entry.href)}
+                    onFocus={() => setActive(entry.href)}
+                    data-cursor={entry.numeral}
                     aria-current={current ? "page" : undefined}
                     className="group grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 py-3.5 md:grid-cols-[5rem_1fr_auto] md:py-5"
                   >
@@ -122,6 +142,9 @@ export function IndexDialog({
                 <dt>Esc</dt>
                 <dd className="text-ash">{labels.keyEsc}</dd>
               </dl>
+            </div>
+            <div>
+              <MotionToggle {...motionLabels} />
             </div>
             <div>
               <p className="meta text-ash">{labels.archive}</p>

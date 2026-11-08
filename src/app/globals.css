@@ -117,10 +117,23 @@
     overflow: hidden;
   }
 
+  /* Motion off — chosen with the switch, or inherited from the OS setting by
+     the boot script. Without JavaScript the OS setting applies directly. */
+  html[data-motion="off"] *,
+  html[data-motion="off"] *::before,
+  html[data-motion="off"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    html:not([data-motion]) *,
+    html:not([data-motion]) *::before,
+    html:not([data-motion]) *::after {
       animation-duration: 0.01ms !important;
       animation-delay: 0ms !important;
       animation-iteration-count: 1 !important;
@@ -192,6 +205,29 @@
   &:hover,
   &:focus-visible {
     background-size: 100% 1px;
+  }
+}
+
+/* A button that fills with sealing wax from the left on hover. */
+@utility ink-fill {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--color-oxblood);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 700ms var(--ease-archive);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    scale: 1 1;
   }
 }
 
@@ -274,8 +310,8 @@
 
 /* ==========================================================================
    Entrance sequence
-   Plays once per session on a direct visit to "/". The decision is made by an
-   inline script before first paint (see components/system/intro-script.tsx),
+   Plays once per session on a direct visit to a home page. The decision is
+   made by the boot script before first paint (components/system/boot.ts),
    so the server HTML is always complete and readable without JavaScript.
    ========================================================================== */
 
@@ -323,27 +359,420 @@
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html[data-intro="play"] .intro-draw {
+html[data-intro="play"] {
+  & .intro-draw {
     animation: ink-draw 2.2s var(--ease-portal) both;
     animation-delay: var(--intro-delay, 0ms);
   }
 
-  html[data-intro="play"] .intro-letter {
+  & .intro-letter {
     display: inline-block;
     animation: letter-rise 1.2s var(--ease-archive) both;
     animation-delay: calc(700ms + var(--i, 0) * 75ms);
   }
 
-  html[data-intro="play"] .intro-rise {
+  & .intro-rise {
     animation: settle-in 1s var(--ease-archive) both;
     animation-delay: var(--intro-delay, 1500ms);
   }
 
-  html[data-intro="play"] .intro-fade {
+  & .intro-fade {
     animation: fade-in 1.2s ease both;
     animation-delay: var(--intro-delay, 1800ms);
   }
+}
+
+/* ==========================================================================
+   Entrance stage — the window answers the visitor.
+   HeroStage writes --px/--py (pointer, -1…1), --lx/--ly (lantern, px) and
+   --sp (scroll through the first screen, 0…1). All of it under motion on.
+   ========================================================================== */
+
+@property --lx {
+  syntax: "<length-percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --ly {
+  syntax: "<length-percentage>";
+  inherits: true;
+  initial-value: 51.6%;
+}
+
+.hero {
+  --lr: clamp(8rem, 30vw, 13rem);
+}
+
+@media (width >= 48rem) {
+  .hero {
+    --ly: 34.7%;
+    --lr: clamp(11rem, 20vw, 21rem);
+  }
+}
+
+/* The lantern: a lit copy of the window, visible only inside the light,
+   and the faint pool of light it throws on the wall behind. */
+.lantern-pool {
+  background-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), rgb(240 240 234 / 0.055), transparent 70%);
+}
+
+.portal-lantern {
+  opacity: 0.95;
+  -webkit-mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 0%, rgb(0 0 0 / 0.35) 42%, transparent 72%);
+  mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 0%, rgb(0 0 0 / 0.35) 42%, transparent 72%);
+}
+
+.portal-stage {
+  transform-origin: 50% 51.6%;
+}
+
+@media (width >= 48rem) {
+  .portal-stage {
+    transform-origin: 50% 34.7%;
+  }
+}
+
+.portal-rose {
+  transform-box: view-box;
+  transform-origin: 200px 222px;
+}
+
+@keyframes rose-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes candle {
+  0%,
+  100% {
+    opacity: 0.62;
+  }
+  9% {
+    opacity: 0.8;
+  }
+  17% {
+    opacity: 0.55;
+  }
+  31% {
+    opacity: 0.9;
+  }
+  44% {
+    opacity: 0.6;
+  }
+  58% {
+    opacity: 0.85;
+  }
+  71% {
+    opacity: 0.5;
+  }
+  86% {
+    opacity: 0.78;
+  }
+}
+
+@keyframes lantern-sway {
+  0% {
+    --lx: 40%;
+    --ly: 46%;
+  }
+  50% {
+    --lx: 58%;
+    --ly: 56%;
+  }
+  100% {
+    --lx: 47%;
+    --ly: 40%;
+  }
+}
+
+@keyframes lantern-sway-wide {
+  0% {
+    --lx: 44%;
+    --ly: 30%;
+  }
+  50% {
+    --lx: 56%;
+    --ly: 40%;
+  }
+  100% {
+    --lx: 49%;
+    --ly: 26%;
+  }
+}
+
+html[data-motion="on"] {
+  & .hero [data-depth] {
+    translate: calc(var(--px, 0) * var(--depth) * -1px) calc(var(--py, 0) * var(--depth) * -1px);
+  }
+
+  & .portal-rose {
+    animation: rose-turn 140s linear infinite;
+  }
+
+  & .portal-candle {
+    animation: candle 4.2s ease-in-out infinite;
+  }
+
+  /* No pointer (phones, or the pointer is elsewhere): the lantern sways. */
+  & .hero:not([data-pointer]) :is(.portal-lantern, .lantern-pool) {
+    animation: lantern-sway 9s ease-in-out infinite alternate;
+  }
+
+  @media (width >= 48rem) {
+    & .hero:not([data-pointer]) :is(.portal-lantern, .lantern-pool) {
+      animation-name: lantern-sway-wide;
+    }
+  }
+
+  /* The passage: scrolling on, the visitor walks through the window. */
+  & .portal-stage {
+    scale: calc(1 + var(--sp, 0) * 1.35);
+    opacity: calc(1 - var(--sp, 0) * 1.15);
+  }
+
+  & .hero-content {
+    opacity: calc(1 - var(--sp, 0) * 1.9);
+    translate: 0 calc(var(--sp, 0) * -5rem);
+  }
+
+  & .hero-title {
+    opacity: calc(1 - var(--sp, 0) * 1.5);
+  }
+
+  & .hero-letter {
+    display: inline-block;
+    translate: calc((var(--i, 0) - 3.5) * var(--sp, 0) * 0.32em) calc(var(--sp, 0) * -0.2em);
+  }
+}
+
+/* ==========================================================================
+   Reveals — the page is set as you read it.
+   data-reveal="…"  plays when the element scrolls into view (RevealObserver)
+   data-enter="…"   plays as soon as the element renders (headers)
+   Hidden states exist only under motion on; animations fill backwards, so
+   once played nothing lingers on the element.
+   ========================================================================== */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 2.75rem;
+  }
+}
+
+@keyframes rise-sm {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+
+@keyframes word-rise {
+  from {
+    translate: 0 112%;
+    rotate: 4deg;
+  }
+}
+
+@keyframes rule-draw {
+  from {
+    opacity: 0;
+    scale: 0 1;
+  }
+}
+
+@keyframes wipe-right {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes from-left {
+  from {
+    opacity: 0;
+    translate: -4rem 0;
+  }
+}
+
+@keyframes from-right {
+  from {
+    opacity: 0;
+    translate: 4rem 0;
+  }
+}
+
+@keyframes unveil {
+  from {
+    clip-path: inset(100% 0 0 0);
+    translate: 0 8%;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes seal-light {
+  from {
+    opacity: 0;
+    scale: 0.2;
+  }
+}
+
+/* Words in masks (see components/ui/words.tsx). */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* room for descenders and italic overhang inside the mask */
+  padding: 0 0.06em 0.14em;
+  margin: 0 -0.06em -0.14em;
+}
+
+.word-in {
+  display: inline-block;
+  transform-origin: 0 100%;
+}
+
+html[data-motion="on"] {
+  /* Before: hidden */
+  & [data-reveal="rise"]:not([data-shown]),
+  & [data-reveal="from-left"]:not([data-shown]),
+  & [data-reveal="from-right"]:not([data-shown]),
+  & [data-reveal="stagger"]:not([data-shown]) > *,
+  & [data-reveal="label"]:not([data-shown]) > * {
+    opacity: 0;
+  }
+  & [data-reveal="words"]:not([data-shown]) .word-in {
+    translate: 0 112%;
+  }
+  /* Observed elements are hidden by opacity only: a clip or a zero scale on
+     the element itself would hide it from the IntersectionObserver too. */
+  & [data-reveal="rule"]:not([data-shown]),
+  & [data-reveal="wipe"]:not([data-shown]) {
+    opacity: 0;
+  }
+  & [data-reveal="draw"]:not([data-shown]) :is(path, circle, rect) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  /* After: played */
+  & [data-reveal="rise"][data-shown],
+  & [data-enter="rise"] {
+    animation: rise 1.1s var(--ease-archive) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  & [data-reveal="from-left"][data-shown] {
+    animation: from-left 1.2s var(--ease-archive) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  & [data-reveal="from-right"][data-shown] {
+    animation: from-right 1.2s var(--ease-archive) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  & [data-reveal="stagger"][data-shown] > * {
+    animation: rise 1s var(--ease-archive) backwards;
+    animation-delay: calc(var(--d, 0ms) + var(--i, 0) * 85ms);
+  }
+  & [data-reveal="words"][data-shown] .word-in,
+  & [data-enter="words"] .word-in {
+    animation: word-rise 1.15s var(--ease-archive) backwards;
+    animation-delay: calc(var(--d, 0ms) + var(--i, 0) * 55ms);
+  }
+  & [data-reveal="rule"][data-shown] {
+    transform-origin: left;
+    animation: rule-draw 1.3s var(--ease-portal) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  & [data-reveal="wipe"][data-shown] {
+    animation: wipe-right 1.1s var(--ease-portal) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  & [data-reveal="draw"][data-shown] :is(path, circle, rect),
+  & [data-enter="draw"] :is(path, circle, rect) {
+    animation: ink-draw 1.6s var(--ease-portal) backwards;
+    animation-delay: calc(var(--d, 0ms) + var(--i, 0) * 140ms);
+  }
+  & [data-enter="draw"] [data-seal] {
+    animation: seal-light 0.8s var(--ease-archive) backwards;
+    animation-delay: calc(var(--d, 0ms) + 1.1s);
+  }
+  & [data-enter="unveil"] {
+    animation: unveil 1.8s var(--ease-portal) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* Section label: mark, then the rule is drawn, then the name. */
+  & [data-reveal="label"][data-shown] > :nth-child(1) {
+    animation: fade-in 0.6s ease backwards;
+  }
+  & [data-reveal="label"][data-shown] > :nth-child(2) {
+    transform-origin: left;
+    animation: rule-draw 0.9s var(--ease-portal) 0.15s backwards;
+  }
+  & [data-reveal="label"][data-shown] > :nth-child(3) {
+    animation: rise-sm 0.8s var(--ease-archive) 0.4s backwards;
+  }
+}
+
+/* Giant shelf numeral behind a fond's title page; drifts away as you read. */
+@keyframes numeral-drift {
+  to {
+    translate: 0 30%;
+    opacity: 0;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  html[data-motion="on"] .numeral-drift {
+    animation: numeral-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 90vh;
+  }
+}
+
+/* ==========================================================================
+   Grain — the faint tooth of paper and film. Still with motion off.
+   ========================================================================== */
+
+.grain {
+  position: fixed;
+  inset: -8%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.94 0 0 0 0 0.94 0 0 0 0 0.92 0 0 0 1.4 -0.45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@keyframes grain-shift {
+  0% {
+    translate: 0 0;
+  }
+  20% {
+    translate: -3% 2%;
+  }
+  40% {
+    translate: 2% -3%;
+  }
+  60% {
+    translate: -2% -1%;
+  }
+  80% {
+    translate: 3% 3%;
+  }
+  100% {
+    translate: 1% -2%;
+  }
+}
+
+html[data-motion="on"] .grain {
+  animation: grain-shift 0.8s steps(1, end) infinite;
 }
 
 /* ==========================================================================
@@ -355,31 +784,27 @@
   pointer-events: none;
 }
 
+/* The old leaf recedes into the dark; the new one rises into place. */
 ::view-transition-old(.leaf-out) {
-  animation: 160ms ease-in both vt-fade reverse;
+  animation: 460ms var(--ease-portal) both leaf-recede;
 }
 
 ::view-transition-new(.leaf-in) {
-  animation:
-    260ms ease-out 120ms both vt-fade,
-    520ms var(--ease-archive) both vt-rise;
+  animation: 900ms var(--ease-archive) 180ms both leaf-arrive;
 }
 
-@keyframes vt-fade {
+@keyframes leaf-recede {
+  to {
+    opacity: 0;
+    scale: 0.93;
+    filter: blur(4px);
+  }
+}
+
+@keyframes leaf-arrive {
   from {
     opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes vt-rise {
-  from {
-    translate: 0 14px;
-  }
-  to {
-    translate: 0 0;
+    translate: 0 96px;
   }
 }
 
@@ -395,10 +820,17 @@
   animation: none;
 }
 
+:root[data-motion="off"]::view-transition-old(*),
+:root[data-motion="off"]::view-transition-new(*),
+:root[data-motion="off"]::view-transition-group(*) {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(*),
-  ::view-transition-new(*),
-  ::view-transition-group(*) {
+  :root:not([data-motion])::view-transition-old(*),
+  :root:not([data-motion])::view-transition-new(*),
+  :root:not([data-motion])::view-transition-group(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
   }
@@ -408,22 +840,37 @@
    Index dialog — native <dialog>, faded in/out with discrete transitions.
    ========================================================================== */
 
+/* The index falls like a curtain from the top of the stage. */
 .index-dialog {
-  opacity: 0;
+  clip-path: inset(0 0 100% 0);
   transition:
-    opacity 320ms var(--ease-archive),
-    overlay 320ms allow-discrete,
-    display 320ms allow-discrete;
+    clip-path 750ms var(--ease-portal),
+    overlay 750ms allow-discrete,
+    display 750ms allow-discrete;
 }
 
 .index-dialog[open] {
-  opacity: 1;
+  clip-path: inset(0 0 0 0);
 }
 
 @starting-style {
   .index-dialog[open] {
-    opacity: 0;
+    clip-path: inset(0 0 100% 0);
   }
+}
+
+/* The numeral of the entry under the pointer, huge, behind the list. */
+.index-numeral {
+  opacity: 0;
+  translate: 0 6%;
+  transition:
+    opacity 600ms var(--ease-archive),
+    translate 900ms var(--ease-archive);
+}
+
+.index-numeral[data-active] {
+  opacity: 1;
+  translate: 0 0;
 }
 
 .index-dialog::backdrop {
@@ -509,4 +956,295 @@
       opacity 600ms ease 250ms,
       visibility 0ms linear 0ms;
   }
+}
+
+/* Motion on the shelf: volumes are set on it one by one, and the books next
+   to the one being pulled out lean away from it. */
+@keyframes shelve {
+  from {
+    translate: 0 35%;
+    rotate: -3deg;
+    opacity: 0;
+  }
+}
+
+html[data-motion="on"] {
+  & .shelf[data-reveal]:not([data-shown]) .shelf-item {
+    opacity: 0;
+  }
+  & .shelf[data-reveal][data-shown] .shelf-item {
+    animation: shelve 1.1s var(--ease-archive) backwards;
+    animation-delay: calc(var(--i, 0) * 95ms);
+  }
+}
+
+@media (hover: hover) and (width >= 64rem) {
+  html[data-motion="on"] {
+    & .shelf-item {
+      transform-origin: 50% 100%;
+      transition:
+        flex-grow 800ms var(--ease-archive),
+        background-color 500ms ease,
+        color 500ms ease,
+        rotate 900ms var(--ease-archive);
+    }
+    & .shelf-item:has(+ .shelf-item:is(:hover, :focus-within)) {
+      rotate: -1.6deg;
+    }
+    & .shelf-item:is(:hover, :focus-within) + .shelf-item {
+      rotate: 1.6deg;
+    }
+    & .shelf-item .spine-title {
+      transition: letter-spacing 900ms var(--ease-archive);
+    }
+    & .shelf-item:is(:hover, :focus-within) .spine-title {
+      letter-spacing: 0.04em;
+    }
+  }
+}
+
+/* ==========================================================================
+   Laboratory — the register is scanned, data runs through the schema,
+   code is typed line by line.
+   ========================================================================== */
+
+@keyframes scan-beam {
+  from {
+    top: 0%;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.scan {
+  position: relative;
+}
+
+html[data-motion="on"] {
+  & .scan[data-reveal]:not([data-shown]) [data-row] {
+    opacity: 0;
+  }
+  & .scan[data-shown] [data-row] {
+    animation: rise-sm 0.8s var(--ease-archive) backwards;
+    animation-delay: calc(250ms + var(--i, 0) * 120ms);
+  }
+  & .scan[data-shown]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--color-ember);
+    box-shadow: 0 0 14px 1px rgb(208 96 107 / 0.45);
+    pointer-events: none;
+    animation: scan-beam 1.8s var(--ease-portal) both;
+  }
+}
+
+/* Connectors of the build/request schema: a pulse travels each one. */
+.flow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+}
+
+.flow::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-line-strong);
+}
+
+.flow-pulse {
+  position: absolute;
+  left: calc(50% - 2.5px);
+  top: 0;
+  width: 5px;
+  height: 5px;
+  background-color: var(--color-ember);
+  opacity: 0;
+}
+
+@media (width >= 48rem) {
+  .flow {
+    height: auto;
+    width: 2.75rem;
+    align-self: stretch;
+  }
+  .flow::before {
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+  .flow-pulse {
+    left: 0;
+    top: calc(50% - 2.5px);
+  }
+}
+
+@keyframes flow-down {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    translate: 0 calc(1.75rem - 5px);
+    opacity: 0;
+  }
+}
+
+@keyframes flow-across {
+  0% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    translate: calc(2.75rem - 5px) 0;
+    opacity: 0;
+  }
+}
+
+html[data-motion="on"] .flow-pulse {
+  animation: flow-down 2.4s var(--ease-portal) infinite;
+  animation-delay: var(--d, 0ms);
+}
+
+@media (width >= 48rem) {
+  html[data-motion="on"] .flow-pulse {
+    animation-name: flow-across;
+  }
+}
+
+/* Code specimen: typed one line after another, the caret waiting at the end. */
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+html[data-motion="on"] {
+  & [data-reveal="type"]:not([data-shown]) .code-line {
+    clip-path: inset(0 100% 0 0);
+  }
+  & [data-reveal="type"][data-shown] .code-line {
+    animation: wipe-right 0.55s steps(28, end) backwards;
+    animation-delay: calc(200ms + var(--i, 0) * 85ms);
+  }
+  & .code-caret {
+    animation: caret 1.1s steps(1, end) infinite;
+  }
+}
+
+/* ==========================================================================
+   Classroom — the notebook rules itself, the margin is drawn in red,
+   the lines are written one after another.
+   ========================================================================== */
+
+@keyframes rules-draw {
+  from {
+    background-size: 0% var(--rule);
+  }
+}
+
+@keyframes margin-draw {
+  from {
+    scale: 1 0;
+  }
+}
+
+html[data-motion="on"] {
+  & [data-reveal="notebook"]:not([data-shown]) {
+    background-size: 0% var(--rule);
+  }
+  & [data-reveal="notebook"]:not([data-shown])::before {
+    scale: 1 0;
+  }
+  & [data-reveal="notebook"]:not([data-shown]) > * {
+    clip-path: inset(0 100% 0 0);
+  }
+  & [data-reveal="notebook"][data-shown] {
+    animation: rules-draw 1.4s var(--ease-portal) backwards;
+  }
+  & [data-reveal="notebook"][data-shown]::before {
+    transform-origin: top;
+    animation: margin-draw 1.1s var(--ease-portal) 0.2s backwards;
+  }
+  & [data-reveal="notebook"][data-shown] > * {
+    animation: wipe-right 1s var(--ease-archive) backwards;
+    animation-delay: calc(550ms + var(--n, 0) * 170ms);
+  }
+}
+
+[data-reveal="notebook"] > :nth-child(2) { --n: 1; }
+[data-reveal="notebook"] > :nth-child(3) { --n: 2; }
+[data-reveal="notebook"] > :nth-child(4) { --n: 3; }
+[data-reveal="notebook"] > :nth-child(5) { --n: 4; }
+[data-reveal="notebook"] > :nth-child(6) { --n: 5; }
+[data-reveal="notebook"] > :nth-child(7) { --n: 6; }
+[data-reveal="notebook"] > :nth-child(8) { --n: 7; }
+[data-reveal="notebook"] > :nth-child(9) { --n: 8; }
+[data-reveal="notebook"] > :nth-child(n + 10) { --n: 9; }
+
+/* Bit board: each bit is a flap that turns over, like a mechanical counter. */
+.flap {
+  perspective: 600px;
+}
+
+.flap-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: rotate 650ms var(--ease-archive);
+}
+
+.flap-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+}
+
+.flap-face[data-face="on"] {
+  rotate: x 180deg;
+}
+
+.flap[aria-pressed="true"] .flap-card {
+  rotate: x 180deg;
+}
+
+@keyframes roll-in {
+  from {
+    translate: 0 -70%;
+    opacity: 0;
+  }
+}
+
+html[data-motion="on"] .roll {
+  display: inline-block;
+  animation: roll-in 420ms var(--ease-archive);
 }

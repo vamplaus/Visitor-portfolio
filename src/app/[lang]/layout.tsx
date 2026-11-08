@@ -13,8 +13,10 @@ import type { NavEntry } from "@/components/layout/nav-types";
 import { SkipLink } from "@/components/layout/skip-link";
 import { StatusBar } from "@/components/layout/status-bar";
 import { InlineScript } from "@/components/system/inline-script";
-import { introDecisionScript } from "@/components/system/intro";
+import { bootScript } from "@/components/system/boot";
 import { MotionProvider } from "@/components/system/motion-provider";
+import { RevealObserver } from "@/components/system/reveal-observer";
+import { Reticle } from "@/components/system/reticle";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -76,11 +78,11 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
     <html
       lang={localeLabels[lang].htmlLang}
       className={`${display.variable} ${sans.variable} ${mono.variable}`}
-      // The intro script sets data-intro on <html> before hydration.
+      // The boot script sets data-motion and data-intro on <html> before hydration.
       suppressHydrationWarning
     >
       <head>
-        <InlineScript html={introDecisionScript} />
+        <InlineScript html={bootScript} />
       </head>
       <body id="top" className="flex min-h-svh flex-col">
         <SkipLink label={dict.common.skip} />
@@ -89,6 +91,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             lang={lang}
             labels={dict.bar}
             entries={entries}
+            motionLabels={{ label: dict.bar.motion, on: dict.bar.motionOn, off: dict.bar.motionOff }}
             indexLabels={{
               ...dict.index,
               fondsCount: `${toRoman(fonds.length)} ${dict.index.fonds}`,
@@ -100,7 +103,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             {children}
           </main>
           <Footer />
+          <RevealObserver />
+          <Reticle />
         </MotionProvider>
+        <div aria-hidden className="grain" />
       </body>
     </html>
   );

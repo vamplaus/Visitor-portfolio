@@ -65,13 +65,14 @@ export function CodeSpecimen({
           </span>
         </div>
         <pre
+          data-reveal="type"
           tabIndex={0}
           aria-label={`${regionLabel}: ${specimen.file}`}
           className="overflow-x-auto bg-surface/60 py-4 font-mono text-[0.8125rem] leading-[1.7]"
         >
           <code>
             {lines.map((line, i) => (
-              <span key={i} className="flex">
+              <span key={i} className="code-line flex" style={{ ["--i" as string]: i } as React.CSSProperties}>
                 <span aria-hidden className="sticky left-0 inline-block shrink-0 bg-surface pr-4 pl-4 text-right text-dust select-none">
                   {String(i + 1).padStart(width, "0")}
                 </span>
@@ -82,6 +83,9 @@ export function CodeSpecimen({
                     </span>
                   ))}
                   {line.length === 0 ? " " : null}
+                  {i === lines.length - 1 ? (
+                    <span aria-hidden className="code-caret ml-1 inline-block h-[1.1em] w-[0.55em] translate-y-[0.2em] bg-ember" />
+                  ) : null}
                 </span>
               </span>
             ))}

@@ -39,6 +39,16 @@ export const ru: Dictionary = {
     index: "Указатель",
     localTime: "МЕСТ",
     language: "Язык",
+    motion: "Движение",
+    motionOn: "вкл",
+    motionOff: "выкл",
+  },
+
+  cursor: {
+    enter: "Войти",
+    open: "Открыть",
+    read: "Читать",
+    toggle: "Нажать",
   },
 
   index: {

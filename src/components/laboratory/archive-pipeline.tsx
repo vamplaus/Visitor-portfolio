@@ -74,19 +74,28 @@ export function ArchivePipeline({ lang, figure }: { lang: Locale; figure: string
         }}
       >
         <div className="space-y-8 md:space-y-10">
-          {lanes.map((lane) => (
+          {lanes.map((lane, laneIndex) => (
             <div key={tr(lane.label, lang)}>
               <p className="meta mb-3 inline-block bg-void px-1.5 text-ember">{tr(lane.label, lang)}</p>
-              <ol aria-label={tr(lane.label, lang)} className="flex flex-col items-stretch md:flex-row md:items-center">
+              <ol
+                data-reveal="stagger"
+                aria-label={tr(lane.label, lang)}
+                className="flex flex-col items-stretch md:flex-row md:items-stretch"
+              >
                 {lane.nodes.map((node, i) => (
                   <Fragment key={node.code}>
                     {i > 0 && (
-                      <li aria-hidden className="meta flex justify-center py-1.5 text-ash md:px-3 md:py-0">
-                        <span className="md:hidden">↓</span>
-                        <span className="hidden md:inline">→</span>
+                      <li aria-hidden className="flow" style={{ ["--i" as string]: i * 2 - 1 } as React.CSSProperties}>
+                        <span
+                          className="flow-pulse"
+                          style={{ ["--d" as string]: `${laneIndex * 1200 + i * 600}ms` } as React.CSSProperties}
+                        />
                       </li>
                     )}
-                    <li className="flex-1 border border-line-strong bg-void p-3 md:min-h-36 md:p-4">
+                    <li
+                      style={{ ["--i" as string]: i * 2 } as React.CSSProperties}
+                      className="flex-1 border border-line-strong bg-void p-3 md:min-h-36 md:p-4"
+                    >
                       <p className="meta text-ash">{node.code}</p>
                       <p className="mt-2 font-display text-xl leading-tight text-paper">{tr(node.title, lang)}</p>
                       <p className="mt-1.5 text-sm text-ash">{tr(node.note, lang)}</p>

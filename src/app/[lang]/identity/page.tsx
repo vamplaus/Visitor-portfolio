@@ -12,6 +12,7 @@ import { fondMetadata } from "@/components/fond/metadata";
 import { PortraitPlate, type PlateImage } from "@/components/identity/portrait-plate";
 import { PlaceholderBlock, PlaceholderInline } from "@/components/ui/placeholder";
 import { PageTransition } from "@/components/system/page-transition";
+import { Words } from "@/components/ui/words";
 
 export const generateMetadata = fondMetadata("identity");
 
@@ -61,9 +62,9 @@ export default async function IdentityPage() {
               avatar={plateImage(identity.plate.avatar, lang)}
               labels={{ ...t.plate, placeholder: dict.common.placeholder }}
             />
-            <dl className="self-start border-t border-line">
-              {dossier.map((row) => (
-                <div key={row.label} className="grid grid-cols-[7rem_1fr] items-baseline gap-4 border-b border-line py-4 md:grid-cols-[9rem_1fr]">
+            <dl data-reveal="stagger" className="self-start border-t border-line">
+              {dossier.map((row, i) => (
+                <div key={row.label} style={{ ["--i" as string]: i } as React.CSSProperties} className="grid grid-cols-[7rem_1fr] items-baseline gap-4 border-b border-line py-4 md:grid-cols-[9rem_1fr]">
                   <dt className="meta text-ash">{row.label}</dt>
                   <dd className="font-display text-xl text-paper md:text-2xl">{row.value}</dd>
                 </div>
@@ -74,8 +75,12 @@ export default async function IdentityPage() {
 
         {/* § 02 Two hemispheres */}
         <FondSection mark="§ 02" label={t.hemispheres.label} id="identity-hemispheres">
-          <h3 className="font-display text-display-m font-light text-paper">{t.hemispheres.title}</h3>
-          <p className="mt-4 max-w-2xl text-ash">{t.hemispheres.intro}</p>
+          <h3 data-reveal="words" className="font-display text-display-m font-light text-paper">
+            <Words text={t.hemispheres.title} />
+          </h3>
+          <p data-reveal="rise" style={{ ["--d" as string]: "250ms" } as React.CSSProperties} className="mt-4 max-w-2xl text-ash">
+            {t.hemispheres.intro}
+          </p>
           <div className="mt-8 grid border-t border-line md:mt-10 md:grid-cols-2">
             <Hemisphere
               lang={lang}
@@ -84,12 +89,14 @@ export default async function IdentityPage() {
                 <span className="font-mono text-sm tracking-[0.18em] text-ash uppercase">{t.hemispheres.logic}</span>
               }
               className="md:border-r md:border-line md:pr-10"
+              reveal="from-left"
             />
             <Hemisphere
               lang={lang}
               items={subjects.filter((s) => s.side === "imagination")}
               heading={<span className="font-display text-2xl text-paper italic">{t.hemispheres.imagination}</span>}
               className="border-t border-line md:border-t-0 md:pl-10"
+              reveal="from-right"
             />
           </div>
         </FondSection>
@@ -161,14 +168,16 @@ function Hemisphere({
   items,
   heading,
   className,
+  reveal,
 }: {
   lang: Locale;
   items: readonly Subject[];
   heading: React.ReactNode;
   className?: string;
+  reveal: "from-left" | "from-right";
 }) {
   return (
-    <div className={className}>
+    <div data-reveal={reveal} style={{ ["--d" as string]: "300ms" } as React.CSSProperties} className={className}>
       <p className="pt-6 pb-3">{heading}</p>
       <ul>
         {items.map((subject) => {

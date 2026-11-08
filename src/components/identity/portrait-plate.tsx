@@ -70,18 +70,25 @@ export function PortraitPlate({
         <CropMarks inset="0.5rem" />
 
         {/* Frame */}
-        <svg viewBox="0 0 300 400" aria-hidden className="absolute inset-0 size-full" fill="none" preserveAspectRatio="none">
+        <svg
+          viewBox="0 0 300 400"
+          aria-hidden
+          data-reveal="draw"
+          className="absolute inset-0 size-full"
+          fill="none"
+          preserveAspectRatio="none"
+        >
           {mode === "photo" ? (
             <g className="stroke-line-strong" strokeWidth={1} vectorEffect="non-scaling-stroke">
-              <path d={NICHE} vectorEffect="non-scaling-stroke" />
-              <path d={NICHE_INNER} vectorEffect="non-scaling-stroke" className="stroke-line" />
-              <path d="M20 372H280" vectorEffect="non-scaling-stroke" />
+              <path d={NICHE} pathLength={1} vectorEffect="non-scaling-stroke" />
+              <path d={NICHE_INNER} pathLength={1} vectorEffect="non-scaling-stroke" className="stroke-line" />
+              <path d="M20 372H280" pathLength={1} vectorEffect="non-scaling-stroke" />
             </g>
           ) : (
             <g className="stroke-line-strong" strokeWidth={1}>
-              <circle cx="150" cy="190" r="118" vectorEffect="non-scaling-stroke" />
-              <circle cx="150" cy="190" r="104" vectorEffect="non-scaling-stroke" className="stroke-line" />
-              <path d="M20 372H280" vectorEffect="non-scaling-stroke" />
+              <circle cx="150" cy="190" r="118" pathLength={1} vectorEffect="non-scaling-stroke" />
+              <circle cx="150" cy="190" r="104" pathLength={1} vectorEffect="non-scaling-stroke" className="stroke-line" />
+              <path d="M20 372H280" pathLength={1} vectorEffect="non-scaling-stroke" />
             </g>
           )}
         </svg>

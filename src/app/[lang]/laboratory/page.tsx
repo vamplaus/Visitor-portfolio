@@ -6,6 +6,7 @@ import { fondMetadata } from "@/components/fond/metadata";
 import { Readout } from "@/components/laboratory/readout";
 import { Register } from "@/components/laboratory/register";
 import { PageTransition } from "@/components/system/page-transition";
+import { Words } from "@/components/ui/words";
 
 export const generateMetadata = fondMetadata("laboratory");
 
@@ -22,8 +23,12 @@ export default async function LaboratoryPage() {
         </FondHeader>
 
         <FondSection mark="§ 01" label={t.registerLabel} id="laboratory-register">
-          <h3 className="font-display text-display-m font-light text-paper">{t.registerTitle}</h3>
-          <p className="mt-4 max-w-2xl text-ash">{t.registerIntro}</p>
+          <h3 data-reveal="words" className="font-display text-display-m font-light text-paper">
+            <Words text={t.registerTitle} />
+          </h3>
+          <p data-reveal="rise" style={{ ["--d" as string]: "250ms" } as React.CSSProperties} className="mt-4 max-w-2xl text-ash">
+            {t.registerIntro}
+          </p>
           <div className="mt-8 md:mt-10">
             <Register />
           </div>

@@ -19,7 +19,7 @@ export async function Register() {
   return (
     <>
       {/* Wide screens: a ruled register */}
-      <table className="hidden w-full border-collapse text-left md:table">
+      <table data-reveal="scan" className="scan hidden w-full border-collapse text-left md:table">
         <caption className="sr-only">{t.registerTitle}</caption>
         <thead>
           <tr className="meta border-y border-line-strong text-ash">
@@ -31,11 +31,16 @@ export async function Register() {
           </tr>
         </thead>
         <tbody>
-          {labEntries.map((entry) => (
-            <tr key={entry.slug} className="group border-b border-line align-top transition-colors hover:bg-surface">
+          {labEntries.map((entry, i) => (
+            <tr
+              key={entry.slug}
+              data-row
+              style={{ ["--i" as string]: i } as React.CSSProperties}
+              className="group border-b border-line align-top transition-colors hover:bg-surface"
+            >
               <td className="meta py-5 pr-4 whitespace-nowrap text-paper">{entry.code}</td>
               <td className="py-5 pr-4">
-                <Link href={href(entry.slug)} className="font-display text-2xl text-paper">
+                <Link href={href(entry.slug)} data-cursor={dict.cursor.read} className="font-display text-2xl text-paper">
                   <span className="ink-link">{tr(entry.title, lang)}</span>
                   <ArrowUpRight aria-hidden className="ml-2 inline size-4 text-ash" strokeWidth={1.25} />
                 </Link>
@@ -48,8 +53,13 @@ export async function Register() {
               <td className="meta py-5 text-ash">{isPlaceholder(entry.since) ? "—" : entry.since}</td>
             </tr>
           ))}
-          {labSlots.map((slot) => (
-            <tr key={slot.code} className="border-b border-dashed border-line align-top text-ash">
+          {labSlots.map((slot, i) => (
+            <tr
+              key={slot.code}
+              data-row
+              style={{ ["--i" as string]: labEntries.length + i } as React.CSSProperties}
+              className="border-b border-dashed border-line align-top text-ash"
+            >
               <td className="meta py-4 pr-4 whitespace-nowrap">{slot.code}</td>
               <td className="py-4 pr-4">
                 <span className="font-display text-xl text-ash">{tr(slot.title, lang)}</span>
@@ -64,9 +74,9 @@ export async function Register() {
       </table>
 
       {/* Phones: index cards */}
-      <ol className="border-t border-line md:hidden" aria-label={t.registerTitle}>
-        {labEntries.map((entry) => (
-          <li key={entry.slug} className="border-b border-line">
+      <ol data-reveal="stagger" className="border-t border-line md:hidden" aria-label={t.registerTitle}>
+        {labEntries.map((entry, i) => (
+          <li key={entry.slug} style={{ ["--i" as string]: i } as React.CSSProperties} className="border-b border-line">
             <Link href={href(entry.slug)} className="block py-5">
               <span className="meta flex items-center justify-between text-paper">
                 {entry.code}
@@ -80,8 +90,12 @@ export async function Register() {
             </Link>
           </li>
         ))}
-        {labSlots.map((slot) => (
-          <li key={slot.code} className="border-b border-dashed border-line py-4 text-ash">
+        {labSlots.map((slot, i) => (
+          <li
+            key={slot.code}
+            style={{ ["--i" as string]: labEntries.length + i } as React.CSSProperties}
+            className="border-b border-dashed border-line py-4 text-ash"
+          >
             <span className="meta flex justify-between">
               {slot.code}
               <span>{t.awaiting}</span>

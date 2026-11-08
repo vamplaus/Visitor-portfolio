@@ -21,7 +21,7 @@ export async function Shelf() {
   const { lang, dict } = await getI18n();
 
   return (
-    <ol className="shelf border-t border-line shelf:border-t-0">
+    <ol data-reveal="shelf" className="shelf border-t border-line shelf:border-t-0">
       {fonds.map((fond, i) => {
         const title = tr(fond.title, lang);
         const kicker = tr(fond.kicker, lang);
@@ -30,11 +30,12 @@ export async function Shelf() {
           <li
             key={fond.id}
             className="shelf-item border-b border-line shelf:border-b-0"
-            style={{ ["--h" as string]: heights[i % heights.length] } as React.CSSProperties}
+            style={{ ["--h" as string]: heights[i % heights.length], ["--i" as string]: i } as React.CSSProperties}
           >
             <Link
               href={localizedPath(lang, fond.href)}
               aria-label={`${fond.numeral}. ${title} — ${kicker}`}
+              data-cursor={`${dict.cursor.open} · ${fond.numeral}`}
               className="group grid grid-cols-[2.75rem_1fr_auto] items-center gap-x-4 py-5 md:grid-cols-[4.5rem_1fr_auto] md:py-8 shelf:flex shelf:h-full shelf:flex-col shelf:items-stretch shelf:gap-0 shelf:overflow-hidden shelf:px-5 shelf:py-5"
             >
               {/* Head of the spine: numeral and emblem */}
@@ -45,7 +46,7 @@ export async function Shelf() {
 
               {/* Body: vertical title, and the page that opens beside it */}
               <span className="min-w-0 shelf:flex shelf:min-h-0 shelf:flex-1 shelf:gap-7 shelf:pt-10">
-                <span className="block font-display text-display-s font-light shelf:spine-text shelf:text-[clamp(2.1rem,2.7vw,3.3rem)] shelf:leading-none">
+                <span className="spine-title block font-display text-display-s font-light shelf:spine-text shelf:text-[clamp(2.1rem,2.7vw,3.3rem)] shelf:leading-none">
                   {title}
                 </span>
                 <span className="mt-1.5 flex items-center gap-2 text-sm text-ash shelf:hidden">

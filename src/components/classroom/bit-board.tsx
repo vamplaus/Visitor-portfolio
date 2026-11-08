@@ -34,7 +34,7 @@ export interface BitBoardLabels {
 const WEIGHTS = [128, 64, 32, 16, 8, 4, 2, 1];
 const TARGETS = [5, 42, 128, 255];
 
-export function BitBoard({ labels, id = "bit-board" }: { labels: BitBoardLabels; id?: string }) {
+export function BitBoard({ labels, id = "bit-board", cursor }: { labels: BitBoardLabels; id?: string; cursor?: string }) {
   const [value, setValue] = useState(0);
   const [solved, setSolved] = useState<number[]>([]);
   const [announcement, setAnnouncement] = useState("");
@@ -92,15 +92,22 @@ export function BitBoard({ labels, id = "bit-board" }: { labels: BitBoardLabels;
                   type="button"
                   aria-pressed={isOn}
                   aria-label={`${labels.bit} ${7 - i}, ${labels.weight.toLowerCase()} ${weight}`}
+                  data-cursor={cursor}
                   onClick={() => toggle(weight)}
-                  className={cn(
-                    "grid aspect-[3/4] w-full place-items-center border font-mono text-2xl transition-colors duration-300 md:text-4xl",
-                    isOn
-                      ? "border-paper bg-paper text-void"
-                      : "border-line-strong text-ash hover:border-ash hover:text-paper",
-                  )}
+                  className="flap group aspect-[3/4] w-full font-mono text-2xl md:text-4xl"
                 >
-                  {isOn ? 1 : 0}
+                  {/* A flap: 0 on the front, 1 on the back; pressing turns it over. */}
+                  <span aria-hidden className="flap-card">
+                    <span
+                      data-face="off"
+                      className="flap-face border border-line-strong text-ash transition-colors group-hover:border-ash group-hover:text-paper"
+                    >
+                      0
+                    </span>
+                    <span data-face="on" className="flap-face border border-paper bg-paper text-void">
+                      1
+                    </span>
+                  </span>
                 </button>
                 <span aria-hidden className="font-mono text-xs text-ash">
                   2<sup className="ml-px text-[0.7em]">{7 - i}</sup>
@@ -118,15 +125,21 @@ export function BitBoard({ labels, id = "bit-board" }: { labels: BitBoardLabels;
             <span className="sm:hidden">{labels.decimalShort}</span>
             <span className="hidden sm:inline">{labels.decimal}</span>
           </dt>
-          <dd className="mt-1 font-mono text-xl text-paper tabular-nums md:text-3xl">{value}</dd>
+          <dd className="mt-1 overflow-hidden font-mono text-xl text-paper tabular-nums md:text-3xl">
+            <span key={value} className="roll">
+              {value}
+            </span>
+          </dd>
         </div>
         <div className="border-r border-line px-3 py-3 md:px-5">
           <dt className="meta text-ash">
             <span className="sm:hidden">{labels.hexShort}</span>
             <span className="hidden sm:inline">{labels.hex}</span>
           </dt>
-          <dd className="mt-1 font-mono text-xl text-paper md:text-3xl">
-            0x{value.toString(16).toUpperCase().padStart(2, "0")}
+          <dd className="mt-1 overflow-hidden font-mono text-xl text-paper md:text-3xl">
+            <span key={value} className="roll">
+              0x{value.toString(16).toUpperCase().padStart(2, "0")}
+            </span>
           </dd>
         </div>
         <div className="px-3 py-3 md:px-5">

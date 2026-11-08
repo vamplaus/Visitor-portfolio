@@ -14,6 +14,7 @@ import { StatusMark } from "@/components/laboratory/status-mark";
 import { PlaceholderInline } from "@/components/ui/placeholder";
 import { SectionLabel } from "@/components/ui/section-label";
 import { PageTransition } from "@/components/system/page-transition";
+import { Words } from "@/components/ui/words";
 
 export async function generateStaticParams() {
   return labEntries.map((entry) => ({ slug: entry.slug }));
@@ -85,15 +86,19 @@ async function SpecSheet({ entry }: { entry: LabEntry }) {
             <SectionLabel mark={entry.code}>{s.label}</SectionLabel>
           </div>
           <div className="col-span-full lg:col-span-9 lg:col-start-4">
-            <h1 id={`${entry.slug}-title`} className="font-display text-display-l font-light text-paper">
-              {tr(entry.title, lang)}
+            <h1 id={`${entry.slug}-title`} data-enter="words" className="font-display text-display-l font-light text-paper">
+              <Words text={tr(entry.title, lang)} />
             </h1>
-            <p className="mt-4 max-w-2xl font-display text-lede font-light text-paper italic md:mt-6">
+            <p
+              data-enter="rise"
+              style={{ ["--d" as string]: "400ms" } as React.CSSProperties}
+              className="mt-4 max-w-2xl font-display text-lede font-light text-paper italic md:mt-6"
+            >
               {tr(entry.summary, lang)}
             </p>
-            <dl className="mt-8 grid grid-cols-2 border-t border-l border-line md:mt-10 md:grid-cols-4">
-              {spec.map((row) => (
-                <div key={row.label} className="border-r border-b border-line p-3 md:p-4">
+            <dl data-reveal="stagger" className="mt-8 grid grid-cols-2 border-t border-l border-line md:mt-10 md:grid-cols-4">
+              {spec.map((row, i) => (
+                <div key={row.label} style={{ ["--i" as string]: i } as React.CSSProperties} className="border-r border-b border-line p-3 md:p-4">
                   <dt className="meta text-ash">{row.label}</dt>
                   <dd className="meta mt-1.5 text-paper normal-case">{row.value}</dd>
                 </div>
@@ -103,13 +108,15 @@ async function SpecSheet({ entry }: { entry: LabEntry }) {
         </header>
 
         <FondSection mark={mark()} label={s.objective} id={`${entry.slug}-objective`}>
-          <p className="max-w-3xl font-display text-lede text-paper">{tr(entry.objective, lang)}</p>
+          <p data-reveal="wipe" className="max-w-3xl font-display text-lede text-paper">
+            {tr(entry.objective, lang)}
+          </p>
         </FondSection>
 
         <FondSection mark={mark()} label={s.protocol} id={`${entry.slug}-protocol`}>
-          <ol className="max-w-3xl border-t border-line">
+          <ol data-reveal="stagger" className="max-w-3xl border-t border-line">
             {tr(entry.protocol, lang).map((step, i) => (
-              <li key={step} className="grid grid-cols-[2.5rem_1fr] gap-3 border-b border-line py-4">
+              <li key={step} style={{ ["--i" as string]: i } as React.CSSProperties} className="grid grid-cols-[2.5rem_1fr] gap-3 border-b border-line py-4">
                 <span className="meta pt-1 text-ash">{String(i + 1).padStart(2, "0")}</span>
                 <span className="text-paper">{step}</span>
               </li>
@@ -136,9 +143,9 @@ async function SpecSheet({ entry }: { entry: LabEntry }) {
 
         {entry.observations && (
           <FondSection mark={mark()} label={s.observations} id={`${entry.slug}-observations`}>
-            <ul className="max-w-3xl space-y-4">
-              {tr(entry.observations, lang).map((o) => (
-                <li key={o} className="grid grid-cols-[1.5rem_1fr] gap-3 text-paper">
+            <ul data-reveal="stagger" className="max-w-3xl space-y-4">
+              {tr(entry.observations, lang).map((o, i) => (
+                <li key={o} style={{ ["--i" as string]: i } as React.CSSProperties} className="grid grid-cols-[1.5rem_1fr] gap-3 text-paper">
                   <span aria-hidden className="text-ash">—</span>
                   {o}
                 </li>

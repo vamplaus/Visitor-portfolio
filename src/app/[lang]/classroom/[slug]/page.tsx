@@ -11,6 +11,7 @@ import { BitBoard } from "@/components/classroom/bit-board";
 import { PlaceholderBlock } from "@/components/ui/placeholder";
 import { SectionLabel } from "@/components/ui/section-label";
 import { PageTransition } from "@/components/system/page-transition";
+import { Words } from "@/components/ui/words";
 
 export async function generateStaticParams() {
   return classroomEntries.map((entry) => ({ slug: entry.slug }));
@@ -77,10 +78,12 @@ async function Lesson({ entry }: { entry: ClassroomEntry }) {
             <SectionLabel mark={entry.code}>{t.sections[entry.section]}</SectionLabel>
           </div>
           <div className="col-span-full lg:col-span-9 lg:col-start-4">
-            <h1 id={`${entry.slug}-title`} className="font-display text-display-l font-light text-paper">
-              {tr(entry.title, lang)}
+            <h1 id={`${entry.slug}-title`} data-enter="words" className="font-display text-display-l font-light text-paper">
+              <Words text={tr(entry.title, lang)} />
             </h1>
-            <p className="mt-4 max-w-2xl text-ash md:mt-6">{tr(entry.summary, lang)}</p>
+            <p data-enter="rise" style={{ ["--d" as string]: "350ms" } as React.CSSProperties} className="mt-4 max-w-2xl text-ash md:mt-6">
+              {tr(entry.summary, lang)}
+            </p>
             <dl className="mt-6 grid grid-cols-3 border-t border-l border-line md:mt-8">
               {meta.map((row) => (
                 <div key={row.label} className="border-r border-b border-line p-3 md:p-4">
@@ -99,7 +102,7 @@ async function Lesson({ entry }: { entry: ClassroomEntry }) {
           <div className="frame grid-archive gap-y-10 py-10 md:py-16">
             {/* Goal and steps, written in the notebook */}
             <div className="col-span-full lg:col-span-9 lg:col-start-4">
-              <div className="notebook border border-line py-[var(--rule)]">
+              <div data-reveal="notebook" className="notebook border border-line py-[var(--rule)]">
                 <span aria-hidden className="margin-note meta text-ash">
                   §
                 </span>
@@ -124,16 +127,16 @@ async function Lesson({ entry }: { entry: ClassroomEntry }) {
 
             {/* The board */}
             {entry.interactive === "bit-board" && (
-              <div className="col-span-full lg:col-span-9 lg:col-start-4">
+              <div data-reveal="rise" className="col-span-full lg:col-span-9 lg:col-start-4">
                 <h2 className="sr-only">{t.lesson.practice}</h2>
-                <BitBoard labels={t.bits} id={`${entry.slug}-board`} />
+                <BitBoard labels={t.bits} id={`${entry.slug}-board`} cursor={dict.cursor.toggle} />
               </div>
             )}
 
             {/* Questions */}
             {entry.questions && (
               <div className="col-span-full lg:col-span-9 lg:col-start-4">
-                <div className="notebook border border-line py-[var(--rule)]">
+                <div data-reveal="notebook" className="notebook border border-line py-[var(--rule)]">
                   <span aria-hidden className="margin-note meta text-ash">
                     ?
                   </span>

@@ -5,6 +5,7 @@ import { site } from "@/content/site";
 import { localizedPath, tr } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 import { Seal } from "@/components/ui/seal";
+import { Words } from "@/components/ui/words";
 
 /** The colophon: what the archive is, where everything is, how it was made. */
 export async function Footer() {
@@ -18,16 +19,16 @@ export async function Footer() {
             <Seal />
             <p className="meta text-paper">{dict.meta.title}</p>
           </div>
-          <p className="mt-6 max-w-sm font-display text-display-s font-light text-paper italic">
-            {dict.tagline.text}
+          <p data-reveal="words" className="mt-6 max-w-sm font-display text-display-s font-light text-paper italic">
+            <Words text={dict.tagline.text} />
           </p>
         </div>
 
         <nav aria-label={dict.footer.fonds} className="col-span-full md:col-span-4 lg:col-span-4 lg:col-start-6">
           <p className="meta text-ash">{dict.footer.fonds}</p>
-          <ol className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
-            {fonds.map((fond) => (
-              <li key={fond.id}>
+          <ol data-reveal="stagger" className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
+            {fonds.map((fond, i) => (
+              <li key={fond.id} style={{ ["--i" as string]: i } as React.CSSProperties}>
                 <Link href={localizedPath(lang, fond.href)} className="group inline-flex items-baseline gap-3 text-paper">
                   <span className="meta w-7 text-ash">{fond.numeral}</span>
                   <span className="ink-link">{tr(fond.title, lang)}</span>

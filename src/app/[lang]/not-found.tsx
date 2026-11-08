@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { localizedPath } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 import { SectionLabel } from "@/components/ui/section-label";
+import { Words } from "@/components/ui/words";
 import { PageTransition } from "@/components/system/page-transition";
 
 /** Shown when a page inside a locale calls notFound() — e.g. an unknown entry. */
@@ -17,14 +18,14 @@ export default async function NotFound() {
           <SectionLabel mark={t.mark}>{t.label}</SectionLabel>
         </div>
         <div className="col-span-full lg:col-span-8 lg:col-start-5">
-          <h1 id="nf-title" className="font-display text-display-l font-light text-paper">
-            {t.title}
+          <h1 id="nf-title" data-enter="words" className="font-display text-display-l font-light text-paper">
+            <Words text={t.title} />
           </h1>
           <p className="mt-6 max-w-xl text-ash">{t.body}</p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href={localizedPath(lang, "/")}
-              className="meta inline-flex items-center gap-3 border border-line-strong px-5 py-3.5 text-paper transition-colors duration-500 hover:border-oxblood hover:bg-oxblood"
+              className="ink-fill meta inline-flex items-center gap-3 border border-line-strong px-5 py-3.5 text-paper transition-colors duration-500 hover:border-oxblood"
             >
               {t.home}
             </Link>

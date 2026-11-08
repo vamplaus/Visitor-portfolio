@@ -6,6 +6,10 @@ import { CropMarks } from "@/components/ui/crop-marks";
 import { IntroController } from "@/components/system/intro-controller";
 import { toRoman } from "@/lib/roman";
 import { ArchPortal } from "./arch-portal";
+import { HeroStage } from "./hero-stage";
+
+const PORTAL_POSITION =
+  "absolute top-0 left-1/2 h-[calc(33svh*640/430)] min-h-[calc(12rem*640/430)] w-auto max-w-none -translate-x-1/2 md:top-auto md:bottom-0 md:h-full md:min-h-0";
 
 const delay = (ms: number) => ({ ["--intro-delay" as string]: `${ms}ms` }) as React.CSSProperties;
 
@@ -24,15 +28,15 @@ export async function Entrance() {
   const letters = site.name.split("");
 
   return (
-    <section
-      aria-labelledby="entrance-title"
+    <HeroStage
+      labelledBy="entrance-title"
       className="relative isolate flex min-h-[calc(100svh-3rem)] flex-col overflow-hidden"
     >
       <CropMarks inset="1rem" />
 
       {/* Running head */}
       <div
-        className="intro-fade frame meta relative flex items-start justify-between gap-6 pt-7 text-ash md:pt-10"
+        className="intro-fade hero-content frame meta relative flex items-start justify-between gap-6 pt-7 text-ash md:pt-10"
         style={delay(1900)}
       >
         <p>
@@ -53,24 +57,31 @@ export async function Entrance() {
         </p>
       </div>
 
-      {/* The window: a band on phones, the backdrop from md up */}
+      {/* The window: a band on phones, the backdrop from md up. The lantern
+          reveals a lit copy of the same drawing wherever the light falls. */}
       <div
         aria-hidden
         className="relative mt-5 h-[33svh] min-h-48 w-full shrink-0 overflow-hidden border-b border-line md:absolute md:inset-0 md:-z-10 md:mt-0 md:h-auto md:border-b-0"
       >
-        <ArchPortal className="absolute top-0 left-1/2 h-[calc(33svh*640/430)] min-h-[calc(12rem*640/430)] w-auto max-w-none -translate-x-1/2 md:top-auto md:bottom-0 md:h-full md:min-h-0" />
+        <div className="portal-stage absolute inset-0">
+          <div className="lantern-pool absolute inset-0" />
+          <ArchPortal className={PORTAL_POSITION} />
+          <div data-lantern className="portal-lantern absolute inset-0">
+            <ArchPortal lit className={PORTAL_POSITION} />
+          </div>
+        </div>
       </div>
 
       {/* Title */}
       <div className="frame flex flex-1 flex-col items-center justify-center pt-7 pb-8 text-center md:py-16">
         <h1
           id="entrance-title"
-          className="font-display text-display-xl font-light tracking-[0.02em] text-paper uppercase"
+          className="hero-title font-display text-display-xl font-light tracking-[0.02em] text-paper uppercase"
         >
           <span className="sr-only">{site.name}</span>
           <span aria-hidden className="inline-block whitespace-nowrap">
             {letters.map((letter, i) => (
-              <span key={i} className="intro-letter" style={{ ["--i" as string]: i } as React.CSSProperties}>
+              <span key={i} className="intro-letter hero-letter" style={{ ["--i" as string]: i } as React.CSSProperties}>
                 {letter}
               </span>
             ))}
@@ -78,7 +89,7 @@ export async function Entrance() {
         </h1>
 
         <p
-          className="intro-rise mt-5 font-display text-lede font-light text-paper italic md:mt-9"
+          className="intro-rise hero-content mt-5 font-display text-lede font-light text-paper italic md:mt-9"
           style={delay(1500)}
         >
           {dict.tagline.before}{" "}
@@ -91,13 +102,14 @@ export async function Entrance() {
 
       {/* Foot */}
       <div
-        className="intro-fade frame flex flex-col gap-5 pb-7 md:flex-row md:items-end md:justify-between md:pb-10"
+        className="intro-fade hero-content frame flex flex-col gap-5 pb-7 md:flex-row md:items-end md:justify-between md:pb-10"
         style={delay(2200)}
       >
         <p className="max-w-xs text-sm text-ash">{dict.meta.description}</p>
         <a
           href="#catalogue"
-          className="group meta inline-flex items-center gap-4 self-start border border-line-strong bg-void px-5 py-3.5 text-paper transition-colors duration-500 hover:border-oxblood hover:bg-oxblood md:self-auto"
+          data-cursor={dict.cursor.enter}
+          className="group ink-fill meta inline-flex items-center gap-4 self-start border border-line-strong bg-void px-5 py-3.5 text-paper transition-colors duration-500 hover:border-oxblood md:self-auto"
         >
           {dict.home.enter}
           <ArrowDown
@@ -109,6 +121,6 @@ export async function Entrance() {
       </div>
 
       <IntroController />
-    </section>
+    </HeroStage>
   );
 }

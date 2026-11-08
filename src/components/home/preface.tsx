@@ -1,5 +1,6 @@
 import { getI18n } from "@/i18n/server";
 import { SectionLabel } from "@/components/ui/section-label";
+import { Words, wordCount } from "@/components/ui/words";
 
 /** What this place is — stated plainly, from facts the archivist has given. */
 export async function Preface() {
@@ -16,14 +17,27 @@ export async function Preface() {
         </div>
 
         <div className="col-span-full md:col-span-7 lg:col-span-8 lg:col-start-5">
-          <p className="font-display text-[clamp(1.85rem,1.2rem+2.4vw,3.1rem)] leading-[1.12] font-light text-paper">
-            {t.lead}
-            <span className="text-ash">{t.leadTail}</span>
+          <p
+            data-reveal="words"
+            className="font-display text-[clamp(1.85rem,1.2rem+2.4vw,3.1rem)] leading-[1.12] font-light text-paper"
+          >
+            <Words text={t.lead} />
+            <span className="text-ash">
+              {" "}
+              <Words text={t.leadTail.trim()} from={wordCount(t.lead)} />
+            </span>
           </p>
 
-          <div className="mt-10 grid gap-x-10 gap-y-6 border-t border-line pt-8 md:mt-14 md:grid-cols-2">
-            <p className="text-ash">{t.body1}</p>
-            <p className="text-ash">{t.body2}</p>
+          <div className="mt-10 md:mt-14">
+            <div data-reveal="rule" className="h-px bg-line" />
+            <div data-reveal="stagger" className="grid gap-x-10 gap-y-6 pt-8 md:grid-cols-2">
+              <p className="text-ash" style={{ ["--i" as string]: 0 } as React.CSSProperties}>
+                {t.body1}
+              </p>
+              <p className="text-ash" style={{ ["--i" as string]: 1 } as React.CSSProperties}>
+                {t.body2}
+              </p>
+            </div>
           </div>
         </div>
       </div>

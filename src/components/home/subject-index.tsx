@@ -4,6 +4,7 @@ import { subjects } from "@/content/subjects";
 import { localizedPath, localeLabels, tr, type Locale } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 import { SectionLabel } from "@/components/ui/section-label";
+import { Words } from "@/components/ui/words";
 
 /** Group subjects under their initial, as in a printed index. */
 function groupByInitial(lang: Locale, digits: string) {
@@ -28,15 +29,15 @@ export async function SubjectIndex() {
       <div className="frame grid-archive gap-y-10">
         <div className="col-span-full md:col-span-3 lg:col-span-3">
           <SectionLabel mark="§ 03">{t.label}</SectionLabel>
-          <h2 id="subjects-title" className="mt-6 font-display text-display-m font-light text-paper md:mt-8">
-            {t.title}
+          <h2 id="subjects-title" data-reveal="words" className="mt-6 font-display text-display-m font-light text-paper md:mt-8">
+            <Words text={t.title} />
           </h2>
           <p className="mt-5 max-w-xs text-sm text-ash">{t.intro}</p>
         </div>
 
         <div className="col-span-full gap-x-14 sm:columns-2 md:col-span-5 lg:col-span-8 lg:col-start-5">
           {groups.map(([initial, items]) => (
-            <div key={initial} className="mb-8 break-inside-avoid">
+            <div key={initial} data-reveal="rise" className="mb-8 break-inside-avoid">
               <p aria-hidden className="font-display text-3xl font-light text-ash">
                 {initial}
               </p>

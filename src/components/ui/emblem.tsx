@@ -51,67 +51,67 @@ function renderEmblem(id: EmblemId, seal: string) {
     case "portal":
       return (
         <>
-          <path d="M9 29V16A14 14 0 0 1 16 3.88A14 14 0 0 1 23 16V29" />
-          <path d="M5 29H27" />
-          <circle cx="16" cy="19" r="2" className={seal} />
+          <path pathLength={1} d="M9 29V16A14 14 0 0 1 16 3.88A14 14 0 0 1 23 16V29" />
+          <path pathLength={1} d="M5 29H27" />
+          <circle pathLength={1} cx="16" cy="19" r="2" className={seal} data-seal />
         </>
       );
     // II — square, inscribed circle, diagonal: construction, logic, proof.
     case "construction":
       return (
         <>
-          <rect x="5" y="5" width="22" height="22" />
-          <circle cx="16" cy="16" r="11" />
-          <path d="M5 27L27 5" />
-          <circle cx="16" cy="16" r="1.5" className={seal} />
+          <rect pathLength={1} x="5" y="5" width="22" height="22" />
+          <circle pathLength={1} cx="16" cy="16" r="11" />
+          <path pathLength={1} d="M5 27L27 5" />
+          <circle pathLength={1} cx="16" cy="16" r="1.5" className={seal} data-seal />
         </>
       );
     // III — an exercise book: ruled lines and the red margin.
     case "ruled":
       return (
         <>
-          <path d="M4 9H28M4 15H28M4 21H28M4 27H28" />
-          <path d="M10 4V30" className={seal} />
+          <path pathLength={1} d="M4 9H28M4 15H28M4 21H28M4 27H28" />
+          <path pathLength={1} d="M10 4V30" className={seal} data-seal />
         </>
       );
     // IV — a wireframe cube: modelling, worlds, the forge.
     case "cube":
       return (
         <>
-          <path d="M16 4L27 10L16 16L5 10Z" />
-          <path d="M5 10V22L16 28L27 22V10" />
-          <path d="M16 16V28" />
-          <circle cx="16" cy="16" r="1.5" className={seal} />
+          <path pathLength={1} d="M16 4L27 10L16 16L5 10Z" />
+          <path pathLength={1} d="M5 10V22L16 28L27 22V10" />
+          <path pathLength={1} d="M16 16V28" />
+          <circle pathLength={1} cx="16" cy="16" r="1.5" className={seal} data-seal />
         </>
       );
     // V — a rose window: the Gothic library, the contemplative mind.
     case "rose":
       return (
         <>
-          <circle cx="16" cy="16" r="12" />
-          <path d="M16 4V11M16 21V28M4 16H11M21 16H28M7.5 7.5L12.5 12.5M19.5 19.5L24.5 24.5M24.5 7.5L19.5 12.5M12.5 19.5L7.5 24.5" />
-          <circle cx="16" cy="16" r="4" className={seal} />
+          <circle pathLength={1} cx="16" cy="16" r="12" />
+          <path pathLength={1} d="M16 4V11M16 21V28M4 16H11M21 16H28M7.5 7.5L12.5 12.5M19.5 19.5L24.5 24.5M24.5 7.5L19.5 12.5M12.5 19.5L7.5 24.5" />
+          <circle pathLength={1} cx="16" cy="16" r="4" className={seal} data-seal />
         </>
       );
     // VI — a branching stem: the digital garden.
     case "branch":
       return (
         <>
-          <path d="M16 30V8" />
-          <path d="M16 22C16 17 19 14 23 13" />
-          <path d="M16 16C16 12 13 10 9 9" />
-          <circle cx="23" cy="13" r="1.5" />
-          <circle cx="9" cy="9" r="1.5" />
-          <circle cx="16" cy="6" r="1.75" className={seal} />
+          <path pathLength={1} d="M16 30V8" />
+          <path pathLength={1} d="M16 22C16 17 19 14 23 13" />
+          <path pathLength={1} d="M16 16C16 12 13 10 9 9" />
+          <circle pathLength={1} cx="23" cy="13" r="1.5" />
+          <circle pathLength={1} cx="9" cy="9" r="1.5" />
+          <circle pathLength={1} cx="16" cy="6" r="1.75" className={seal} data-seal />
         </>
       );
     // VII — a sealed letter: correspondence.
     case "letter":
       return (
         <>
-          <rect x="4" y="8" width="24" height="16" />
-          <path d="M4 8L16 18L28 8" />
-          <circle cx="16" cy="18" r="2.25" className={seal} />
+          <rect pathLength={1} x="4" y="8" width="24" height="16" />
+          <path pathLength={1} d="M4 8L16 18L28 8" />
+          <circle pathLength={1} cx="16" cy="18" r="2.25" className={seal} data-seal />
         </>
       );
   }
