@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import { fonds } from "@/content/fonds";
 import { site } from "@/content/site";
+import { isPlaceholder } from "@/content/types";
 import { hasLocale, localeLabels, localizedPath, locales, tr } from "@/i18n/config";
 import { alternatesFor } from "@/i18n/metadata";
 import { dictionaryFor } from "@/i18n/server";
@@ -33,7 +34,13 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     description: dict.meta.description,
     applicationName: dict.meta.title,
     keywords: [...site.keywords],
-    authors: [{ name: site.archivist.handle }],
+    authors: [
+      {
+        name: isPlaceholder(site.archivist.name)
+          ? site.archivist.handle
+          : `${tr(site.archivist.name, lang)} (${site.archivist.handle})`,
+      },
+    ],
     alternates: alternatesFor("/", lang),
     openGraph: {
       type: "website",

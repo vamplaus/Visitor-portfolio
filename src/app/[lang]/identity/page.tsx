@@ -35,7 +35,7 @@ export default async function IdentityPage() {
       value: isPlaceholder(archivist.name) ? (
         <PlaceholderInline label={tr(archivist.name.label, lang)} srPrefix={dict.common.placeholder} />
       ) : (
-        archivist.name
+        tr(archivist.name, lang)
       ),
     },
     {

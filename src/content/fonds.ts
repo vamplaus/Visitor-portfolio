@@ -16,8 +16,8 @@ export const fonds: readonly Fond[] = [
     code: "VMP·ID",
     kicker: { en: "Who keeps this archive", ru: "Кто хранит этот архив" },
     description: {
-      en: "The archivist: a teacher of informatics and programming. Dossier, fields of work and the questions that connect them.",
-      ru: "Хранитель архива — преподаватель информатики и программирования. Досье, направления работы и вопросы, которые их связывают.",
+      en: "The archivist, Khamzat: a teacher of informatics and programming. Dossier, fields of work and the questions that connect them.",
+      ru: "Хранитель архива — Хамзат, преподаватель информатики и программирования. Досье, направления работы и вопросы, которые их связывают.",
     },
     holdings: {
       en: ["Dossier", "Fields of work", "Principles", "Timeline"],

@@ -12,8 +12,21 @@ import { placeholder, type ImageRef, type L, type Maybe } from "./types";
 export const identity = {
   plate: {
     initial: "photo" as "photo" | "avatar",
-    photo: placeholder({ en: "Portrait photograph", ru: "Портретная фотография" }) as Maybe<ImageRef>,
-    avatar: placeholder({ en: "Author's avatar", ru: "Авторский аватар" }) as Maybe<ImageRef>,
+    photo: {
+      src: "/identity/portrait.jpg",
+      width: 1200,
+      height: 1600,
+      alt: {
+        en: "Khamzat (VAMPLAUS) in black, seated in a lattice pavilion painted all over with VAMPLAUS lettering",
+        ru: "Хамзат (VAMPLAUS) в чёрном сидит в решётчатой беседке, расписанной надписями VAMPLAUS",
+      },
+    } as Maybe<ImageRef>,
+    avatar: {
+      src: "/identity/avatar.jpg",
+      width: 640,
+      height: 640,
+      alt: { en: "Khamzat (VAMPLAUS), portrait", ru: "Хамзат (VAMPLAUS), портрет" },
+    } as Maybe<ImageRef>,
   },
   /** Paragraphs of the biography, written by the author. */
   biography: placeholder({ en: "Biography", ru: "Биография" }) as Maybe<L<readonly string[]>>,

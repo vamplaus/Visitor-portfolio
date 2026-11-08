@@ -7,7 +7,7 @@ export const en = {
   meta: {
     title: "VAMPLAUS — The Digital Archive",
     description:
-      "A personal digital archive of code, teaching, games and ideas, kept by a teacher of informatics and programming.",
+      "A personal digital archive of code, teaching, games and ideas, kept by Khamzat, a teacher of informatics and programming.",
   },
   tagline: {
     before: "Between",
@@ -80,7 +80,7 @@ export const en = {
       lead: "A working archive. Code, lessons, games and ideas are catalogued side by side",
       leadTail: " — the way a library shelves a treatise on logic next to a book of poems.",
       body1:
-        "Kept by a teacher of informatics and programming. Its holdings span artificial intelligence, Python and Linux; game development and 3D modelling; history, philosophy, literature and visual art.",
+        "Kept by Khamzat, a teacher of informatics and programming. Its holdings span artificial intelligence, Python and Linux; game development and 3D modelling; history, philosophy, literature and visual art.",
       body2:
         "Seven fonds, one system. Each fond keeps its own character — a laboratory, a classroom, a forge, a library — while sharing the same grid, the same type and the same single colour.",
     },

@@ -18,7 +18,7 @@ export const site = {
       en: "Teacher of informatics and programming",
       ru: "Преподаватель информатики и программирования",
     } satisfies L,
-    name: placeholder({ en: "Full name", ru: "Полное имя" }) as Maybe<string>,
+    name: { en: "Khamzat", ru: "Хамзат" } as Maybe<L>,
     location: placeholder({ en: "City / country", ru: "Город / страна" }) as Maybe<L>,
   },
 
