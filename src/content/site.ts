@@ -10,7 +10,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   /** Year the archive was opened. */
   opened: 2026,
-  version: "0.3.0",
+  version: "0.4.0",
 
   archivist: {
     handle: "VAMPLAUS",

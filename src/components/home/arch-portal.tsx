@@ -79,8 +79,14 @@ export function ArchPortal({ className, lit = false }: { className?: string; lit
         </g>
       </g>
 
-      {/* Tracery: lancets and mullion */}
+      {/* Tracery: lancets and mullion — the panes engraved with hatching */}
       <g data-depth style={depth(21)} className={stroke("stroke-line")} strokeWidth={lit ? 1 : 0.8}>
+        {!lit && (
+          <g className="intro-fade stroke-none" style={delay(1200)} opacity={0.55}>
+            <path d={`${lancetPath(80, 200, 400)}V${FLOOR}H80Z`} fill="url(#hatch-1)" />
+            <path d={`${lancetPath(200, 320, 400)}V${FLOOR}H200Z`} fill="url(#hatch-1)" />
+          </g>
+        )}
         <path d={lancetPath(80, 200, 400)} pathLength={1} className="intro-draw" style={delay(700)} />
         <path d={lancetPath(200, 320, 400)} pathLength={1} className="intro-draw" style={delay(780)} />
         <path d="M200 400V640" pathLength={1} className="intro-draw" style={delay(860)} />

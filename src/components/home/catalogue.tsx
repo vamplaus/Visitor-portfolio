@@ -13,7 +13,7 @@ export async function Catalogue() {
     <section id="catalogue" aria-labelledby="catalogue-title" className="border-t border-line py-20 md:py-36">
       <div className="frame grid-archive items-end gap-y-6">
         <div className="col-span-full lg:col-span-7">
-          <SectionLabel mark="§ 02">{t.label}</SectionLabel>
+          <SectionLabel mark="§ 03">{t.label}</SectionLabel>
           <h2 id="catalogue-title" data-reveal="words" className="mt-6 font-display text-display-l font-light text-paper md:mt-8">
             <Words text={`${toRoman(fonds.length)} ${t.title}`} />
           </h2>

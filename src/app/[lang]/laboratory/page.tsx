@@ -4,6 +4,7 @@ import { FondHeader, FondSection, fondTitleId } from "@/components/fond/fond-hea
 import { FondPager } from "@/components/fond/fond-pager";
 import { fondMetadata } from "@/components/fond/metadata";
 import { Readout } from "@/components/laboratory/readout";
+import { FondSpecimens } from "@/components/cabinet/cabinet";
 import { Register } from "@/components/laboratory/register";
 import { PageTransition } from "@/components/system/page-transition";
 import { Words } from "@/components/ui/words";
@@ -21,6 +22,8 @@ export default async function LaboratoryPage() {
         <FondHeader fond={getFond("laboratory")}>
           <Readout />
         </FondHeader>
+
+        <FondSpecimens ids={["neural", "terminal"]} numbers={[2, 3]} />
 
         <FondSection mark="§ 01" label={t.registerLabel} id="laboratory-register">
           <h3 data-reveal="words" className="font-display text-display-m font-light text-paper">

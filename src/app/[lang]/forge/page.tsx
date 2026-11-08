@@ -5,5 +5,5 @@ export const generateMetadata = fondMetadata("forge");
 
 /** Fond: Forge. In preparation — opens in a later stage. */
 export default function ForgePage() {
-  return <FondPlaceholder id="forge" />;
+  return <FondPlaceholder id="forge" specimens={{ ids: ["polyhedron", "sprite"], numbers: [1, 6] }} />;
 }

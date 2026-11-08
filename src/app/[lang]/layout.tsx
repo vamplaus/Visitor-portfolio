@@ -8,6 +8,7 @@ import { alternatesFor } from "@/i18n/metadata";
 import { dictionaryFor } from "@/i18n/server";
 import { display, mono, sans } from "@/lib/fonts";
 import { toRoman } from "@/lib/roman";
+import { Hatches } from "@/components/cabinet/hatches";
 import { Footer } from "@/components/layout/footer";
 import type { NavEntry } from "@/components/layout/nav-types";
 import { SkipLink } from "@/components/layout/skip-link";
@@ -86,6 +87,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
       </head>
       <body id="top" className="flex min-h-svh flex-col">
         <SkipLink label={dict.common.skip} />
+        <Hatches />
         <MotionProvider>
           <StatusBar
             lang={lang}

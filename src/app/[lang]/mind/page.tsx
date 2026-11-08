@@ -5,5 +5,5 @@ export const generateMetadata = fondMetadata("mind");
 
 /** Fond: Mind. In preparation — opens in a later stage. */
 export default function MindPage() {
-  return <FondPlaceholder id="mind" />;
+  return <FondPlaceholder id="mind" specimens={{ ids: ["astrolabe", "codex"], numbers: [5, 7] }} />;
 }

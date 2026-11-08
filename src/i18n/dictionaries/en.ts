@@ -98,6 +98,25 @@ export const en = {
     },
   },
 
+  cabinet: {
+    label: "Cabinet",
+    title: "Cabinet of curiosities",
+    intro:
+      "One specimen for each field of the archivist's work, drawn in the engraved line of the archive — and every one of them works. Visual art has no drawer of its own: it is the engraving everything here is drawn in.",
+    specimen: "No.",
+    keptIn: "Kept in",
+    bandLabel: "Specimens",
+    stats: { v: "Verts", e: "Edges", f: "Faces" },
+    scene: "Scene · archive.tscn",
+    controls: "← →  ·  Space",
+    square: {
+      kinds: { rows: "Rows", cols: "Columns", diags: "Diagonals", quarters: "Quarters", centre: "Centre" },
+      year: "15 14 — the year, 1514",
+    },
+    role: "teacher of informatics and programming",
+    codexNote: "cf. fonds II–V",
+  },
+
   footer: {
     fonds: "Fonds",
     colophon: "Colophon",

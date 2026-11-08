@@ -1248,3 +1248,120 @@ html[data-motion="on"] .roll {
   display: inline-block;
   animation: roll-in 420ms var(--ease-archive);
 }
+
+/* ==========================================================================
+   Cabinet of curiosities — specimens. Every loop runs only while the
+   specimen is on screen ([data-live]) and motion is on.
+   ========================================================================== */
+
+/* Perceptron: activation climbing the window, neurons flashing in waves. */
+.nn-pulse {
+  stroke-dasharray: 0.09 1.2;
+  stroke-dashoffset: 1.09;
+  opacity: 0;
+}
+
+@keyframes nn-travel {
+  0% {
+    stroke-dashoffset: 1.09;
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  40% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  46%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes nn-flash {
+  0%,
+  100% {
+    fill: var(--color-void);
+  }
+  6% {
+    fill: var(--color-ember);
+  }
+  24% {
+    fill: var(--color-void);
+  }
+}
+
+.nn-rose {
+  transform-box: view-box;
+  transform-origin: 150px 96px;
+}
+
+html[data-motion="on"] [data-live] {
+  & .nn-pulse {
+    animation: nn-travel 3.3s linear infinite;
+    animation-delay: var(--d, 0s);
+  }
+  & .nn-node {
+    animation: nn-flash 3.3s ease-out infinite;
+    animation-delay: calc(var(--d, 0s) + 0.6s);
+  }
+  & .nn-rose {
+    animation: rose-turn 60s linear infinite;
+  }
+}
+
+/* Shell caret */
+.term-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 1px;
+  translate: 0 0.2em;
+  background-color: var(--color-paper);
+}
+
+html[data-motion="on"] .term-caret {
+  animation: caret 1s steps(1, end) infinite;
+}
+
+/* Astrolabe: the rete turns about the pole. */
+.astro-rete {
+  transform-box: view-box;
+  transform-origin: 200px 225px;
+}
+
+html[data-motion="on"] [data-live] .astro-rete {
+  animation: rose-turn 240s linear infinite;
+}
+
+/* Codex: now and then a leaf turns over. */
+.codex-leaf {
+  opacity: 0;
+}
+
+@keyframes leaf-turn {
+  0%,
+  58% {
+    opacity: 0;
+    rotate: y 0deg;
+  }
+  60% {
+    opacity: 1;
+    rotate: y 0deg;
+  }
+  84% {
+    opacity: 1;
+    rotate: y -180deg;
+  }
+  88%,
+  100% {
+    opacity: 0;
+    rotate: y -180deg;
+  }
+}
+
+html[data-motion="on"] [data-live] .codex-leaf {
+  animation: leaf-turn 9s var(--ease-portal) infinite;
+}

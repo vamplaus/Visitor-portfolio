@@ -28,7 +28,7 @@ export async function SubjectIndex() {
     <section aria-labelledby="subjects-title" className="border-t border-line py-20 md:py-36">
       <div className="frame grid-archive gap-y-10">
         <div className="col-span-full md:col-span-3 lg:col-span-3">
-          <SectionLabel mark="§ 03">{t.label}</SectionLabel>
+          <SectionLabel mark="§ 04">{t.label}</SectionLabel>
           <h2 id="subjects-title" data-reveal="words" className="mt-6 font-display text-display-m font-light text-paper md:mt-8">
             <Words text={t.title} />
           </h2>

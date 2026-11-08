@@ -1,6 +1,7 @@
 import { getFond } from "@/content/fonds";
 import { getI18n } from "@/i18n/server";
 import { Notebook } from "@/components/classroom/notebook";
+import { FondSpecimens } from "@/components/cabinet/cabinet";
 import { FondHeader, FondSection, fondTitleId } from "@/components/fond/fond-header";
 import { FondPager } from "@/components/fond/fond-pager";
 import { fondMetadata } from "@/components/fond/metadata";
@@ -16,6 +17,7 @@ export default async function ClassroomPage() {
     <PageTransition>
       <article aria-labelledby={fondTitleId("classroom")}>
         <FondHeader fond={getFond("classroom")} />
+        <FondSpecimens ids={["magic-square"]} numbers={[4]} />
         <FondSection mark="§ 01" label={dict.classroom.notebookLabel} id="classroom-notebook">
           <Notebook />
         </FondSection>

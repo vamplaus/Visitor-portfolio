@@ -7,12 +7,20 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { PageTransition } from "@/components/system/page-transition";
 import { FondHeader, fondTitleId } from "./fond-header";
 import { FondPager } from "./fond-pager";
+import { FondSpecimens } from "@/components/cabinet/cabinet";
+import type { SpecimenId } from "@/content/cabinet";
 
 /**
  * A fond that is not open yet. Shows what it will hold — categories only —
  * and states plainly that there are no entries.
  */
-export async function FondPlaceholder({ id }: { id: FondId }) {
+export async function FondPlaceholder({
+  id,
+  specimens,
+}: {
+  id: FondId;
+  specimens?: { ids: SpecimenId[]; numbers: number[] };
+}) {
   const { lang, dict } = await getI18n();
   const fond = getFond(id);
 
@@ -20,6 +28,7 @@ export async function FondPlaceholder({ id }: { id: FondId }) {
     <PageTransition>
       <article aria-labelledby={fondTitleId(id)}>
         <FondHeader fond={fond} />
+        {specimens ? <FondSpecimens ids={specimens.ids} numbers={specimens.numbers} /> : null}
 
         <section aria-labelledby={`${id}-holdings`} className="border-t border-line">
           <div className="frame grid-archive gap-y-8 py-10 md:py-20">
