@@ -13,19 +13,19 @@ export const identity = {
   plate: {
     initial: "photo" as "photo" | "avatar",
     photo: {
-      src: "/identity/portrait.jpg",
-      width: 1200,
-      height: 1600,
+      src: "/identity/portrait-ink.jpg",
+      width: 1086,
+      height: 1448,
       alt: {
-        en: "Khamzat (VAMPLAUS) in black, seated in a lattice pavilion painted all over with VAMPLAUS lettering",
-        ru: "Хамзат (VAMPLAUS) в чёрном сидит в решётчатой беседке, расписанной надписями VAMPLAUS",
+        en: "Khamzat (VAMPLAUS), drawn in black ink: seated in a lattice pavilion covered with VAMPLAUS lettering",
+        ru: "Хамзат (VAMPLAUS), рисунок чёрной тушью: сидит в решётчатой беседке, исписанной надписями VAMPLAUS",
       },
     } as Maybe<ImageRef>,
     avatar: {
-      src: "/identity/avatar.jpg",
+      src: "/identity/avatar-ink.jpg",
       width: 640,
       height: 640,
-      alt: { en: "Khamzat (VAMPLAUS), portrait", ru: "Хамзат (VAMPLAUS), портрет" },
+      alt: { en: "Khamzat (VAMPLAUS), ink portrait", ru: "Хамзат (VAMPLAUS), портрет тушью" },
     } as Maybe<ImageRef>,
   },
   /** Paragraphs of the biography, written by the author. */
